@@ -1,0 +1,64 @@
+1-add BD con referencia
+	-Encima del proyecto (Ojo: No en la solución)
+  a.- add Project Reference
+  b.- seleccionar la libreria de bd.dll
+  c.- add EFcore.sqlserver nugets 6.0.7
+2-Servicio en ==Progrma.cs== de la bd para Json. 
+  a. using AdventureWorksNS.Data;
+     using static System.Console;
+     using Microsoft.AspNetCore.Mvc.Formatters;
+
+ 
+           // b.Agregar el Contexto de la base de datos de Aventure works
+             builder.Services.AdventureWorksDBContext();
+
+            // Add services to the container.
+            // Agregar y visualizar los fromatos soportados
+            builder.Services.AddControllers(options =>
+            {
+                WriteLine("Formatos por omision: ");
+                foreach (IOutputFormatter formatter in options.OutputFormatters)
+                {
+                    OutputFormatter? mediaFormatter = formatter as OutputFormatter;
+                    if (mediaFormatter == null)
+                    {
+                        WriteLine($"{formatter.GetType().Name}");
+                    }
+                    else
+                    {
+                        WriteLine($"{mediaFormatter.GetType().Name}," +
+                            $"Media types: {string.Join(",",mediaFormatter.SupportedMediaTypes)}");
+                    }
+                }
+            })
+                .AddXmlDataContractSerializerFormatters() 
+                .AddXmlSerializerFormatters();
+     
+
+3-Agregar al proyecto add folder Repositories --> para crear la interfaz del CRUD
+  add class public interface ICustomerRepository
+  using AdventureWorksNS.Data;
+
+	using AdventureWorksNS.Data;
+
+namespace AdventureWorksAPI.Repositories
+{
+    public interface ICustomerRepository
+    { //CRUD
+        //mi intefaz
+        Task<Customer> CreateAsync(Customer c); //Create
+        Task<IEnumerable<Customer>> RetrieveAllAsync(); //Read todas 
+        Task<IEnumerable<Customer>> RetrieveByIdAsync(int id); //Read por parametro
+        Task<IEnumerable<Customer>>  UpdateAsync(int id, Customer c); //Udate
+        Task<bool?> DeleteAsync(int id); //boleano si existe o no 
+
+        
+
+    }
+}
+
+4.- CustomerRepository
+
+
+
+   
