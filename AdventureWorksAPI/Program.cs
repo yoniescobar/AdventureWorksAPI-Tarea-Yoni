@@ -2,6 +2,7 @@ using AdventureWorksNS.Data;
 using static System.Console;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using AdventureWorksAPI.Repositories;
+using System.Text.Json.Serialization;
 
 namespace AdventureWorksAPI
 {
@@ -35,7 +36,9 @@ namespace AdventureWorksAPI
                 }
             })
                 .AddXmlDataContractSerializerFormatters() 
-                .AddXmlSerializerFormatters();
+                .AddXmlSerializerFormatters()
+                .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -45,6 +48,7 @@ namespace AdventureWorksAPI
             //creamos los controladores  //esquemas de repositorio
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+
 
             var app = builder.Build();
 
